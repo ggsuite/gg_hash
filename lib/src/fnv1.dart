@@ -33,8 +33,9 @@ int fnv1(Iterable<dynamic> data, [int start = 0, int? end]) {
     // If not devidable by 8, increase buffer length
     if (!isDevidableBy8) {
       // Create a new buffer with a length devidable by 8
-      final requiredByteCount =
-          byteCount % 8 > 0 ? (byteCount ~/ 8 + 1) * 8 : byteCount;
+      final requiredByteCount = byteCount % 8 > 0
+          ? (byteCount ~/ 8 + 1) * 8
+          : byteCount;
       final dataNew = Uint8List(requiredByteCount);
 
       // Copy data over to new buffer
@@ -57,12 +58,13 @@ int fnv1(Iterable<dynamic> data, [int start = 0, int? end]) {
   for (int i = start; i < end; i++) {
     final val = data.elementAt(i);
     hash = hash * prime; // Multiply the current hash with the prime
-    hash = hash ^
+    hash =
+        hash ^
         ((val is Enum)
             ? val.name.hashCode
             : val is int
-                ? val
-                : val.hashCode); // XOR with the current data
+            ? val
+            : val.hashCode); // XOR with the current data
   }
 
   return hash;

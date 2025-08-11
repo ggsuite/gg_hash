@@ -56,10 +56,7 @@ void main() {
       });
 
       test('existing _hash should be overwritten', () {
-        final json = hashJson({
-          'key': 'value',
-          '_hash': 'oldHash',
-        });
+        final json = hashJson({'key': 'value', '_hash': 'oldHash'});
         expect(json['key'], 'value');
         final expectedHash = calcHash('{"key":"value"}');
         expect(json['_hash'], expectedHash);
@@ -67,18 +64,15 @@ void main() {
       });
 
       group('containing floating point numbers', () {
-        test(
-            'truncates the floating point numbers to "hashFloatingPrecision" '
+        test('truncates the floating point numbers to "hashFloatingPrecision" '
             '10 decimal places', () {
-          final hash0 = hashJson(
-            const {'key': 1.01234567890123456789},
-            floatingPointPrecision: 9,
-          )['_hash'];
+          final hash0 = hashJson(const {
+            'key': 1.01234567890123456789,
+          }, floatingPointPrecision: 9)['_hash'];
 
-          final hash1 = hashJson(
-            const {'key': 1.01234567890123456389},
-            floatingPointPrecision: 9,
-          )['_hash'];
+          final hash1 = hashJson(const {
+            'key': 1.01234567890123456389,
+          }, floatingPointPrecision: 9)['_hash'];
           final expectedHash = calcHash('{"key":1.012345678}');
           expect(hash0, hash1);
           expect(hash0, expectedHash);
@@ -86,17 +80,9 @@ void main() {
       });
 
       group('containing three key value pairs', () {
-        const json0 = {
-          'a': 'value',
-          'b': 1.0,
-          'c': true,
-        };
+        const json0 = {'a': 'value', 'b': 1.0, 'c': true};
 
-        const json1 = {
-          'b': 1.0,
-          'a': 'value',
-          'c': true,
-        };
+        const json1 = {'b': 1.0, 'a': 'value', 'c': true};
 
         late Map<String, dynamic> j0;
         late Map<String, dynamic> j1;
@@ -107,9 +93,7 @@ void main() {
         });
 
         test('should create a string of key value pairs and hash it', () {
-          final expectedHash = calcHash(
-            '{"a":"value","b":1.0,"c":true}',
-          );
+          final expectedHash = calcHash('{"a":"value","b":1.0,"c":true}');
 
           expect(j0['_hash'], expectedHash);
           expect(j1['_hash'], expectedHash);
@@ -128,9 +112,7 @@ void main() {
         // Hash an parent object containing one child object
         final parent = hashJson(const {
           'key': 'value',
-          'child': {
-            'key': 'value',
-          },
+          'child': {'key': 'value'},
         });
 
         // Check the hash of the child object
@@ -139,9 +121,7 @@ void main() {
         expect(child['_hash'], childHash);
 
         // Check the hash of the top level object
-        final parentHash = calcHash(
-          '{"child":"$childHash","key":"value"}',
-        );
+        final parentHash = calcHash('{"child":"$childHash","key":"value"}');
 
         expect(parent['_hash'], parentHash);
       });
@@ -152,18 +132,14 @@ void main() {
           'key': 'value',
           'child': {
             'key': 'value',
-            'grandChild': {
-              'key': 'value',
-            },
+            'grandChild': {'key': 'value'},
           },
         });
 
         // Check the hash of the grandChild object
         final grandChild =
             parent['child']!['grandChild'] as Map<String, dynamic>;
-        final grandChildHash = calcHash(
-          '{"key":"value"}',
-        );
+        final grandChildHash = calcHash('{"key":"value"}');
         expect(grandChild['_hash'], grandChildHash);
 
         // Check the hash of the child object
@@ -174,9 +150,7 @@ void main() {
         expect(child['_hash'], childHash);
 
         // Check the hash of the top level object
-        final parentHash = calcHash(
-          '{"child":"$childHash","key":"value"}',
-        );
+        final parentHash = calcHash('{"child":"$childHash","key":"value"}');
         expect(parent['_hash'], parentHash);
       });
     });
@@ -200,9 +174,7 @@ void main() {
               'key': ['value', 1.0, true],
             });
 
-            final expectedHash = calcHash(
-              '{"key":["value","1.0","true"]}',
-            );
+            final expectedHash = calcHash('{"key":["value","1.0","true"]}');
 
             expect(json['_hash'], expectedHash);
             expect(json['_hash'], '1DJgJ9oBYJWG04HMShLE9o');
@@ -241,22 +213,15 @@ void main() {
                 });
 
                 // Did hash the array item?
-                final itemHash = calcHash(
-                  '{"key":"value"}',
-                );
+                final itemHash = calcHash('{"key":"value"}');
                 final array = json['array'] as List<dynamic>;
                 final item0 = array[0] as Map<String, dynamic>;
                 expect(item0['_hash'], itemHash);
-                expect(
-                  itemHash,
-                  '5Dq88zdSRIOcAS+WM/lYYt',
-                );
+                expect(itemHash, '5Dq88zdSRIOcAS+WM/lYYt');
 
                 // Did use the array item hash for the array hash?
 
-                final expectedHash = calcHash(
-                  '{"array":["$itemHash"]}',
-                );
+                final expectedHash = calcHash('{"array":["$itemHash"]}');
 
                 expect(json['_hash'], expectedHash);
                 expect(json['_hash'], 'i5C5fpWlcOXE363N3cABei');
@@ -290,24 +255,20 @@ void main() {
         late String message;
 
         try {
-          hashJson({
-            'key': Exception(),
-          });
+          hashJson({'key': Exception()});
         } catch (e) {
           message = e.toString();
         }
 
-        expect(
-          message,
-          'Exception: Unsupported type: _Exception',
-        );
+        expect(message, 'Exception: Unsupported type: _Exception');
       });
     });
 
     group('private methods', () {
       group('_copyJson', () {
-        final copyJson = HashJson.privateMethods['_copyJson']
-            as Map<String, dynamic> Function(Map<String, dynamic>);
+        final copyJson =
+            HashJson.privateMethods['_copyJson']
+                as Map<String, dynamic> Function(Map<String, dynamic>);
 
         test('empty json', () {
           expect(copyJson(<String, dynamic>{}), <String, dynamic>{});
@@ -319,11 +280,9 @@ void main() {
 
         test('nested value', () {
           expect(
-            copyJson(
-              {
-                'a': {'b': 1},
-              },
-            ),
+            copyJson({
+              'a': {'b': 1},
+            }),
             {
               'a': {'b': 1},
             },
@@ -332,11 +291,9 @@ void main() {
 
         test('list value', () {
           expect(
-            copyJson(
-              {
-                'a': [1, 2],
-              },
-            ),
+            copyJson({
+              'a': [1, 2],
+            }),
             {
               'a': [1, 2],
             },
@@ -345,13 +302,11 @@ void main() {
 
         test('list with list', () {
           expect(
-            copyJson(
-              {
-                'a': [
-                  [1, 2],
-                ],
-              },
-            ),
+            copyJson({
+              'a': [
+                [1, 2],
+              ],
+            }),
             {
               'a': [
                 [1, 2],
@@ -362,13 +317,11 @@ void main() {
 
         test('list with map', () {
           expect(
-            copyJson(
-              {
-                'a': [
-                  {'b': 1},
-                ],
-              },
-            ),
+            copyJson({
+              'a': [
+                {'b': 1},
+              ],
+            }),
             {
               'a': [
                 {'b': 1},
@@ -382,11 +335,7 @@ void main() {
             test('in map', () {
               late String message;
               try {
-                copyJson(
-                  {
-                    'a': Exception(),
-                  },
-                );
+                copyJson({'a': Exception()});
               } catch (e) {
                 message = e.toString();
               }
@@ -397,11 +346,9 @@ void main() {
             test('in list', () {
               late String message;
               try {
-                copyJson(
-                  {
-                    'a': [Exception()],
-                  },
-                );
+                copyJson({
+                  'a': [Exception()],
+                });
               } catch (e) {
                 message = e.toString();
               }
@@ -427,8 +374,9 @@ void main() {
       });
 
       group('_truncate(double, precision)', () {
-        final toTruncatedString = HashJson.privateMethods['_truncate'] as double
-            Function(double, int);
+        final toTruncatedString =
+            HashJson.privateMethods['_truncate']
+                as double Function(double, int);
 
         test('truncates commas but only if precision exceeds precision', () {
           expect(toTruncatedString(1.23456789, 2), 1.23);
@@ -453,8 +401,9 @@ void main() {
       });
 
       group('_jsonString(map)', () {
-        final jsonString = HashJson.privateMethods['_jsonString'] as String
-            Function(Map<String, dynamic>);
+        final jsonString =
+            HashJson.privateMethods['_jsonString']
+                as String Function(Map<String, dynamic>);
 
         test('converts a map into a json string', () {
           expect(jsonString({'a': 1}), '{"a":1}');

@@ -6,6 +6,7 @@
 
 - Add a ggHash method and a hashJson method to allow to create 128 bit hashes on arbitrary strings and hash JSON files
 - Add example code
+- Add .gitattributes file
 
 ## [1.0.4] - 2024-04-13
 

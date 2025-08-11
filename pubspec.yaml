@@ -4,13 +4,13 @@ version: 1.0.5
 repository: https://github.com/inlavigo/gg_hash
 
 environment:
-  sdk: ">=3.2.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dev_dependencies:
   args: ^2.4.2
   coverage: ^1.7.2
   gg_capture_print: ^1.0.2
-  lints: ^3.0.0
+  lints: ^6.0.0
   test: ^1.24.0
   yaml: ^3.1.2
 dependencies:

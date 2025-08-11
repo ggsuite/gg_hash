@@ -27,10 +27,7 @@ Map<String, dynamic> hashJson(
 /// Adds hashes to JSON object
 class HashJson {
   /// Constructor
-  const HashJson({
-    this.hashLength = 22,
-    this.floatingPointPrecision = 10,
-  });
+  const HashJson({this.hashLength = 22, this.floatingPointPrecision = 10});
 
   /// The hash length in bytes
   final int hashLength;
@@ -55,11 +52,9 @@ class HashJson {
   // Private
   // ######################
 
-// ...........................................................................
+  // ...........................................................................
   /// Recursively adds hashes to a nested object.
-  void _addHashesToObject(
-    Map<String, dynamic> obj,
-  ) {
+  void _addHashesToObject(Map<String, dynamic> obj) {
     // Recursively process child elements
     obj.forEach((key, value) {
       if (value is Map<String, dynamic>) {
@@ -103,7 +98,7 @@ class HashJson {
     obj['_hash'] = hash;
   }
 
-// ...........................................................................
+  // ...........................................................................
   /// Builds a representation of a list for hashing.
   List<dynamic> _flattenList(List<dynamic> list) {
     var flattenedList = <dynamic>[];
@@ -178,10 +173,7 @@ class HashJson {
 
   // ...........................................................................
   /// Turns a double into a string with a given precision.
-  static double _truncate(
-    double value,
-    int precision,
-  ) {
+  static double _truncate(double value, int precision) {
     String result = value.toString();
     final parts = result.split('.');
     final integerPart = parts[0];
@@ -217,19 +209,17 @@ class HashJson {
       }
     }
 
-    return '{${map.entries.map(
-          (e) => '"${e.key}"'
-              ':${encodeValue(e.value)}',
-        ).join(",")}}';
+    return '{${map.entries.map((e) => '"${e.key}"'
+        ':${encodeValue(e.value)}').join(",")}}';
   }
 
   // ...........................................................................
   /// For test purposes we are exposing these private methods
   static Map<String, dynamic> get privateMethods => {
-        '_copyJson': _copyJson,
-        '_copyList': _copyList,
-        '_isBasicType': _isBasicType,
-        '_truncate': _truncate,
-        '_jsonString': _jsonString,
-      };
+    '_copyJson': _copyJson,
+    '_copyList': _copyList,
+    '_isBasicType': _isBasicType,
+    '_truncate': _truncate,
+    '_jsonString': _jsonString,
+  };
 }
