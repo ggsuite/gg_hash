@@ -12,10 +12,10 @@ int fnv1(Iterable<dynamic> data, [int start = 0, int? end]) {
   const int prime = 16777619;
   int hash = 2166136261; // FNV offset basis
 
-  // Write buffer length into hashcode
-  hash ^= ((end ?? data.length) - start).hashCode;
-
   end ??= data.length;
+
+  // Write buffer length into hashcode
+  hash ^= (end - start).hashCode;
 
   // ..................................................
   // If data is typed data, convert it to 64 bit chunks
@@ -26,35 +26,100 @@ int fnv1(Iterable<dynamic> data, [int start = 0, int? end]) {
     // Estimate byte length
     final byteCount = typedData.lengthInBytes;
 
-    // Is byte count devidable by 8?
-    final isDevidableBy8 = byteCount % 8 == 0;
+    // Number of bytes not filling a complete 64 bit chunk
+    final remainingBytes = byteCount & 7;
 
-    // .............................................
-    // If not devidable by 8, increase buffer length
-    if (!isDevidableBy8) {
-      // Create a new buffer with a length devidable by 8
-      final requiredByteCount = byteCount % 8 > 0
-          ? (byteCount ~/ 8 + 1) * 8
-          : byteCount;
-      final dataNew = Uint8List(requiredByteCount);
-
-      // Copy data over to new buffer
-      dataNew.setRange(0, byteCount, typedData);
-      start = 0;
-      end = requiredByteCount;
-
-      // Use the new buffer for calculation
-      data = dataNew;
+    // ...................................................
+    // If devidable by 8, hash the 64 bit chunks directly
+    if (remainingBytes == 0) {
+      final chunks = Int64List.sublistView(data as TypedData, start, end);
+      for (int i = 0; i < chunks.length; i++) {
+        hash = hash * prime; // Multiply the current hash with the prime
+        hash = hash ^ chunks[i]; // XOR with the current data
+      }
+      return hash;
     }
 
-    // ............................
-    // Turn data into an int64 list
-    data = Int64List.sublistView(data as TypedData, start, end);
-    start = 0;
-    end = data.length;
+    // ..........................................................
+    // If not devidable by 8, hash the complete 64 bit chunks and
+    // treat the remaining bytes as a zero padded last chunk.
+    if (typedData.offsetInBytes & 7 == 0) {
+      // Hash the complete chunks
+      final completeByteCount = byteCount - remainingBytes;
+      final chunks = Int64List.sublistView(typedData, 0, completeByteCount);
+      for (int i = 0; i < chunks.length; i++) {
+        hash = hash * prime; // Multiply the current hash with the prime
+        hash = hash ^ chunks[i]; // XOR with the current data
+      }
+
+      // Hash the remaining bytes as a zero padded 64 bit chunk
+      final lastChunkBytes = Uint8List(8);
+      lastChunkBytes.setRange(0, remainingBytes, typedData, completeByteCount);
+      hash = hash * prime;
+      hash = hash ^ Int64List.sublistView(lastChunkBytes)[0];
+      return hash;
+    }
+
+    // ...............................................................
+    // Otherwise copy the data into a buffer with a length devidable
+    // by 8 and hash the 64 bit chunks of the copy.
+    final requiredByteCount = (byteCount ~/ 8 + 1) * 8;
+    final dataNew = Uint8List(requiredByteCount);
+    dataNew.setRange(0, byteCount, typedData);
+
+    final chunks = Int64List.sublistView(dataNew);
+    for (int i = 0; i < chunks.length; i++) {
+      hash = hash * prime; // Multiply the current hash with the prime
+      hash = hash ^ chunks[i]; // XOR with the current data
+    }
+    return hash;
   }
 
-  // Calculate hashcode
+  // .....................................................
+  // Hash lists of ints and strings with specialized loops
+  if (data is List<int>) {
+    for (int i = start; i < end; i++) {
+      hash = hash * prime; // Multiply the current hash with the prime
+      hash = hash ^ data[i]; // XOR with the current data
+    }
+    return hash;
+  }
+
+  if (data is List<String>) {
+    for (int i = start; i < end; i++) {
+      hash = hash * prime; // Multiply the current hash with the prime
+      hash = hash ^ data[i].hashCode; // XOR with the current data
+    }
+    return hash;
+  }
+
+  if (data is List) {
+    for (int i = start; i < end; i++) {
+      final val = data[i];
+      hash = hash * prime; // Multiply the current hash with the prime
+      hash =
+          hash ^
+          ((val is Enum)
+              ? val.name.hashCode
+              : val is int
+              ? val
+              : val.hashCode); // XOR with the current data
+    }
+    return hash;
+  }
+
+  // ..................................
+  // Hash lazy iterables of ints
+  if (data is Iterable<int>) {
+    for (int i = start; i < end; i++) {
+      hash = hash * prime; // Multiply the current hash with the prime
+      hash = hash ^ data.elementAt(i); // XOR with the current data
+    }
+    return hash;
+  }
+
+  // ..................................
+  // Hash all other iterables
   for (int i = start; i < end; i++) {
     final val = data.elementAt(i);
     hash = hash * prime; // Multiply the current hash with the prime

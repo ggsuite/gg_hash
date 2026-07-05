@@ -1,6 +1,6 @@
 name: gg_hash
 description: A simple FNV-1 hash implementation used across multiple projects within our organization.
-version: 1.0.5
+version: 1.1.0
 repository: https://github.com/inlavigo/gg_hash
 
 environment:
@@ -9,9 +9,8 @@ environment:
 dev_dependencies:
   args: ^2.4.2
   coverage: ^1.7.2
+  crypto: ^3.0.6
   gg_capture_print: ^1.0.2
   lints: ^6.0.0
   test: ^1.24.0
   yaml: ^3.1.2
-dependencies:
-  crypto: ^3.0.6

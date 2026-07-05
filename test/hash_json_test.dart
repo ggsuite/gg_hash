@@ -262,6 +262,67 @@ void main() {
 
         expect(message, 'Exception: Unsupported type: _Exception');
       });
+
+      test('when a list contains an unsupported type', () {
+        late String message;
+
+        try {
+          hashJson({
+            'key': [Exception()],
+          });
+        } catch (e) {
+          message = e.toString();
+        }
+
+        expect(message, 'Exception: Unsupported type: _Exception');
+      });
+
+      test('a RangeError when the hash length exceeds 44', () {
+        // A base64 encoded SHA-256 digest has only 44 characters
+        expect(
+          () => hashJson(const {'key': 'value'}, hashLength: 45),
+          throwsRangeError,
+        );
+      });
+    });
+
+    group('special cases', () {
+      test('truncates doubles with a floating point precision of zero', () {
+        final json = hashJson(const {'key': 1.5}, floatingPointPrecision: 0);
+        expect(json['_hash'], calcHash('{"key":1.0}'));
+      });
+
+      test('hashes nested lists following other elements', () {
+        final json = hashJson(const {
+          'key': [
+            1,
+            [2],
+          ],
+        });
+        expect(json['_hash'], calcHash('{"key":["1",["2"]]}'));
+      });
+
+      test('hashes unicode keys and escapes quotes in values', () {
+        final json = hashJson(const {'kèy': 'välüe"'});
+        expect(json['_hash'], calcHash('{"kèy":"välüe\\""}'));
+      });
+
+      test('hashes documents larger than the internal buffer', () {
+        final value = 'a' * 100000;
+        final json = hashJson({'key': value});
+        expect(json['_hash'], calcHash('{"key":"$value"}'));
+      });
+
+      test('supports the full hash length of 44', () {
+        final json = hashJson(const {'key': 'value'}, hashLength: 44);
+        final hash = json['_hash'] as String;
+        expect(
+          hash,
+          const HashJson(hashLength: 44).calcHash('{"key":"value"}'),
+        );
+        expect(hash.length, 44);
+        expect(hash.endsWith('='), isTrue);
+      });
     });
 
     group('private methods', () {
