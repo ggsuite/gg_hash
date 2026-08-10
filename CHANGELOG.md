@@ -1,6 +1,12 @@
 # Changelog
 
-## [1.1.0] - 2026-07-05
+## Unreleased
+
+### Changed
+
+- Provide gg via npm
+
+## 1.1.0 - 2026-07-05
 
 ### Added
 
@@ -20,20 +26,20 @@ reusable UTF-8 buffers and uses a built-in, allocation-free SHA-256
 it is only used in tests now to verify the built-in SHA-256
 - Optimize performance using claude
 
-## [1.0.4] - 2024-04-13
+## 1.0.4 - 2024-04-13
 
 ### Removed
 
-- dependency to gg\_install\_gg, remove ./check script
+- dependency to gg_install_gg, remove ./check script
 - dependency pana
 
-## [1.0.3] - 2024-04-09
+## 1.0.3 - 2024-04-09
 
 ### Removed
 
 - 'Pipline: Disable cache'
 
-## [1.0.2] - 2024-04-09
+## 1.0.2 - 2024-04-09
 
 ### Changed
 
@@ -42,7 +48,7 @@ it is only used in tests now to verify the built-in SHA-256
 - 'Github Actions Pipeline'
 - 'Github Actions Pipeline: Add SDK file containing flutter into .github/workflows to make github installing flutter and not dart SDK'
 
-## [1.0.1] - 2024-04-05
+## 1.0.1 - 2024-04-05
 
 ### Changed
 
@@ -54,9 +60,3 @@ it is only used in tests now to verify the built-in SHA-256
 ### Added
 
 - Initial version.
-
-[1.1.0]: https://github.com/inlavigo/gg_hash/compare/1.0.4...1.1.0
-[1.0.4]: https://github.com/inlavigo/gg_hash/compare/1.0.3...1.0.4
-[1.0.3]: https://github.com/inlavigo/gg_hash/compare/1.0.2...1.0.3
-[1.0.2]: https://github.com/inlavigo/gg_hash/compare/1.0.1...1.0.2
-[1.0.1]: https://github.com/inlavigo/gg_hash/compare/1.0.0...1.0.1
