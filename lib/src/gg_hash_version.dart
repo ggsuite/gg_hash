@@ -9,4 +9,4 @@
 // coverage:ignore-file
 
 /// The version of the `gg_hash` package.
-const String ggHashVersion = '1.2.0';
+const String ggHashVersion = '1.3.0';

@@ -1,10 +1,15 @@
 # Changelog
 
-## Unreleased
+## 1.3.0 - 2026-08-31
 
 ### Changed
 
 - Use ggwsm in pipelines
+- Roll out the dna_ggsuite DNA
+
+### Fixed
+
+- Fix Windows-specific test failures that blocked the review
 
 ## 1.2.0 - 2026-08-13
 
