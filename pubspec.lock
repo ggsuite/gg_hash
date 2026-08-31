@@ -194,12 +194,11 @@ packages:
     source: hosted
     version: "4.0.0"
   gg_args:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: gg_args
-      sha256: "99f885af29fc49bc2a302ca7cbfbda96f9d35efc3ae9885122ba076bd5d45d8a"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../gg_args"
+      relative: true
+    source: path
     version: "3.1.0"
   gg_capture_print:
     dependency: "direct dev"
@@ -226,12 +225,11 @@ packages:
     source: hosted
     version: "4.2.0"
   gg_log:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: gg_log
-      sha256: ce3e914a4b276b5462b23dca28d63b3648985f6f2744c5d957faa31ee15ab544
-      url: "https://pub.dev"
-    source: hosted
+      path: "../gg_log"
+      relative: true
+    source: path
     version: "1.1.0"
   gg_process:
     dependency: transitive
@@ -252,10 +250,9 @@ packages:
   helix:
     dependency: "direct dev"
     description:
-      name: helix
-      sha256: "265d45c9a99a830ecb93b170a00876dac2757d0b11e1d77e8d700315a8b2d084"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../helix"
+      relative: true
+    source: path
     version: "1.2.0"
   http_multi_server:
     dependency: transitive
