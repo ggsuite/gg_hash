@@ -9,6 +9,7 @@ build
 *.vm.json
 .DS_Store
 .gg/*
+!.gg/gg_rc
 !.gg/gg.json
 .gg/publish_config.json
 .gg/publish_state.json
