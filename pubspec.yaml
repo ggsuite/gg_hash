@@ -10,7 +10,7 @@ dev_dependencies:
   args: ^2.7.0
   coverage: ^1.16.0
   crypto: ^3.0.8
-  dna_ggsuite: ^2.0.0
+  dna_ggsuite: ^3.0.0
   gg_capture_print: ^1.2.1
   helix: ^1.15.2
   lints: ^6.1.0
