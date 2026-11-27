@@ -6,6 +6,7 @@
 
 - Upgrade the DNA
 - Upgrade the SDK, the dependencies and the DNA
+- Upgrade the SDK and the DNA and run migrate_doc_structure.dart
 
 ## 1.3.0 - 2026-08-31
 
